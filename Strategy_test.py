@@ -59,13 +59,13 @@ class strategy_metrics:
         to = (portfolio_weights.fillna(0)-portfolio_weights.shift().fillna(0)).abs().sum(1)   
         return to
 
-    def summary_stats(self, portfolio_weights, ret = None):
+    def summary_stats(self, portfolio_weights, ret = None, tcosts = None):
         """
         Calculate the annualized return, volatility, and Sharpe ratio of a portfolio.
         """
         if ret is None:
             ret = self.rets
-        rets = (portfolio_weights.shift() * ret).sum(axis=1)
+        rets = (portfolio_weights.shift() * ret).sum(axis=1) - (tcosts.sum(1) if tcosts is not None else 0)
 
         stats = {}
         stats['avg']=rets.mean()*252

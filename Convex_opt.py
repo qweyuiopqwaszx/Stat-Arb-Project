@@ -32,7 +32,7 @@ class convex_optimization:
 
     def constraints(self, constraints = None):
         if constraints is None:
-            constraints = [cvx.sum(self.weights) == 1]
+            constraints = [cvx.sum(self.weights) == 1, self.weights >= 0]
         return constraints
 
     def optimize_portfolio(self, portfolio_weights, constraints=None, comm_bps_per_share=35 * 1e-4, tc_penalty=1/100.):
@@ -48,7 +48,10 @@ class convex_optimization:
             tcost = self.get_tcost(w, w_prev, comm_bps, tc_penalty)
             
             objective = cvx.Minimize(tracking_error + tcost)
-            constraints = self.constraints(constraints)
+            if constraints is not None:
+                constraints = self.constraints(constraints)
+            else:
+                constraints = [cvx.sum(w) == 1, w >= 0]
             prob = cvx.Problem(objective,constraints)
             prob.solve(warm_start=True)
 

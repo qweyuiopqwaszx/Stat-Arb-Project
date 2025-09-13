@@ -10,7 +10,8 @@ import LSTM
 # importlib.reload(LSTM)
 # from LSTM import StockLSTMTrainer
 
-# Apply PCA before LSTM and map it back after model 
+# Apply PCA before LSTM and map it back after model?
+# 
 
 Daily_bar = pd.read_pickle('price_1d_20210101_20250817.pk')
 
